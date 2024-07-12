@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ATMbanking
 {
     public class ATM
     {
+        private ViOneLogger logger;
+
         private Account account;
 
         public ATM(Account account)
@@ -17,20 +15,21 @@ namespace ATMbanking
 
         public void Start()
         {
+            logger = new ViOneLogger();
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Bankomat dasturiga xush kelibsiz!");
-                Console.WriteLine("A) Balans tekshirish");
-                Console.WriteLine("B) Kartani to'ldirish");
-                Console.WriteLine("C) Kartadan pul yechish");
-                Console.WriteLine("D) Chiqish");
+                logger.Info("ATM dasturiga xush kelibsiz!");
+                logger.Info("A) Balans tekshirish");
+                logger.Info("B) Kartani to'ldirish");
+                logger.Info("C) Kartadan pul yechish");
+                logger.Info("D) Chiqish");
                 Console.Write("Tanlang (A, B, C, D): ");
                 string choice = Console.ReadLine().ToUpper();
 
                 if (choice == "D")
                 {
-                    Console.WriteLine("Dastur tugatildi.");
+                    logger.Info("Dastur tugatildi.");
                     break;
                 }
 
@@ -39,7 +38,7 @@ namespace ATMbanking
 
                 if (!account.ValidatePassword(password))
                 {
-                    Console.WriteLine("Noto'g'ri parol. Qayta urinib ko'ring.");
+                    logger.Info("Noto'g'ri parol. Qayta urinib ko'ring.");
                     ReturnToMainMenu();
                     continue;
                 }
@@ -56,7 +55,7 @@ namespace ATMbanking
                         WithdrawMoney();
                         break;
                     default:
-                        Console.WriteLine("Noto'g'ri tanlov. Iltimos, qayta urinib ko'ring.");
+                        logger.Info("Noto'g'ri tanlov. Iltimos, qayta urinib ko'ring.");
                         ReturnToMainMenu();
                         break;
                 }
@@ -65,18 +64,18 @@ namespace ATMbanking
 
         private void CheckBalance()
         {
-            Console.WriteLine("Joriy balans: $" + account.GetBalance());
+            logger.Info("Joriy balans: $" + account.GetBalance());
             ReturnToMainMenu();
         }
 
         private void DepositMoney()
         {
-            Console.WriteLine("Balans: $" + account.GetBalance());
-            Console.WriteLine("Karta raqami: " + account.CardNumber);
+            logger.Info("Balans: $" + account.GetBalance());
+            logger.Info("Karta raqami: " + account.CardNumber);
             Console.Write("To'ldiriladigan miqdorni kiriting: $");
             double amount = Convert.ToDouble(Console.ReadLine());
             account.Deposit(amount);
-            Console.WriteLine("Balans yangilandi: $" + account.GetBalance());
+            logger.Info("Balans yangilandi: $" + account.GetBalance());
             ReturnToMainMenu();
         }
 
@@ -84,14 +83,14 @@ namespace ATMbanking
         {
             while (true)
             {
-                Console.WriteLine("Joriy balans: $" + account.GetBalance());
-                Console.WriteLine("Echilishi mumkin bo'lgan miqdorlar:");
-                Console.WriteLine("1) $10");
-                Console.WriteLine("2) $20");
-                Console.WriteLine("3) $50");
-                Console.WriteLine("4) $100");
-                Console.WriteLine("5) Boshqa miqdor");
-                Console.WriteLine("6) Chiqish");
+                logger.Info("Joriy balans: $" + account.GetBalance());
+                logger.Info("Echilishi mumkin bo'lgan miqdorlar:");
+                logger.Info("1) $10");
+                logger.Info("2) $20");
+                logger.Info("3) $50");
+                logger.Info("4) $100");
+                logger.Info("5) Boshqa miqdor");
+                logger.Info("6) Chiqish");
                 Console.Write("Tanlang (1-6): ");
                 string choice = Console.ReadLine();
 
@@ -118,18 +117,18 @@ namespace ATMbanking
                     case "6":
                         return;
                     default:
-                        Console.WriteLine("Noto'g'ri tanlov. Iltimos, qayta urinib ko'ring.");
+                        logger.Info("Noto'g'ri tanlov. Iltimos, qayta urinib ko'ring.");
                         continue;
                 }
 
                 if (!account.Withdraw(withdrawAmount))
                 {
-                    Console.WriteLine("Balans yetarli emas yoki noto'g'ri miqdor!");
+                    logger.Info("Balans yetarli emas yoki noto'g'ri miqdor!");
                 }
                 else
                 {
-                    Console.WriteLine("$" + withdrawAmount + " muvaffaqiyatli yechildi.");
-                    Console.WriteLine("Qolgan balans: $" + account.GetBalance());
+                    logger.Info("$" + withdrawAmount + " muvaffaqiyatli yechildi.");
+                    logger.Info("Qolgan balans: $" + account.GetBalance());
                 }
 
                 Console.Write("Yana pul yechishni xohlaysizmi? (ha/yo'q): ");
@@ -144,7 +143,7 @@ namespace ATMbanking
 
         private void ReturnToMainMenu()
         {
-            Console.WriteLine("Bosh sahifaga qaytish uchun istalgan tugmani bosing...");
+            logger.Info("Bosh sahifaga qaytish uchun istalgan tugmani bosing...");
             Console.ReadKey();
         }
     }
