@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ATMbanking
 {
-    public class Account
+    public class Account 
     {
         private double balance;
         private const string correctPassword = "1234";
